@@ -18,5 +18,10 @@ namespace ECommerce.Repositories
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
         }
+
+        public User? GetUserByPhoneNumber(string phoneNumber)
+        {
+            return _context.Users.Where(u => u.PhoneNumber == phoneNumber).FirstOrDefault();
+        }
     }
 }

@@ -25,5 +25,10 @@ namespace ECommerce.Repositories
             var cart = _context.Carts.Include(c => c.CartItems).ThenInclude(ci => ci.Item).FirstOrDefault(c => c.Id == cartId);
             return cart;
         }
+
+        public Cart? GetCartByUserId(int userId)
+        {
+            return _context.Carts.Include(c => c.CartItems).ThenInclude(c => c.Item).Where(c => c.UserId == userId).FirstOrDefault();
+        }
     }
 }

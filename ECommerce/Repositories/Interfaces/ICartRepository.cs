@@ -6,5 +6,7 @@ namespace ECommerce.Repositories.Interfaces
     {
         Task AddCartAsync(Cart cart);
         Cart? GetCartById(int cartId);
+        Cart? GetCartByUserId(int userId);
+
     }
 }

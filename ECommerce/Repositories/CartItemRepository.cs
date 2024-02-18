@@ -41,10 +41,5 @@ namespace ECommerce.Repositories
             _context.CartItems.Remove(cartItem);
             await _context.SaveChangesAsync();
         }
-
-        public IQueryable<CartItem> CreateQuery()
-        {
-            return _context.CartItems.AsQueryable();
-        }
     }
 }

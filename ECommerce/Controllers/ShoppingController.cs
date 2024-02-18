@@ -93,6 +93,23 @@ namespace ECommerce.Controllers
             }
         }
 
+
+        [HttpGet]
+        [Route("filter-cart-items")]
+        public ActionResult<List<CartItem>> GetCartItemsWithFilters(string phoneNumber, DateTime time, int quantity, int itemId)
+        {
+            try
+            {
+                var cartItems = _shopService.GetCartItemsWithFiltering(
+                    phoneNumber, time, quantity, itemId);
+                return Ok(cartItems);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to retrieve cart items: {ex.Message}");
+            }
+        }
+
         [HttpDelete]
         [Route("cart-item")]
         public ActionResult RemoveCartItem(int cartItemId)

@@ -6,5 +6,6 @@ namespace ECommerce.Repositories.Interfaces
     public interface IUserRepository
     {
         Task AddUserAsync(User newUser);
+        User? GetUserByPhoneNumber(string phoneNumber);
     }
 }

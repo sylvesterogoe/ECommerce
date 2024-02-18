@@ -1,4 +1,5 @@
-﻿using ECommerce.Models;
+﻿using ECommerce.Data;
+using ECommerce.Models;
 using ECommerce.Repositories.Interfaces;
 using ECommerce.Services.Interfaces;
 
@@ -57,6 +58,26 @@ public class ShopService : IShopService
 
         var cartItems = cart?.CartItems;
         if (cartItems == null || !cartItems.Any()) return new List<CartItem>();
+
+        return cartItems;
+    }
+
+    public List<CartItem> GetCartItemsWithFiltering(
+        string phoneNumber, DateTime time, int quantity, int itemId)
+    {
+        var emptyList = new List<CartItem>();
+
+        //Find user with the PhoneNumber
+        var user = _userRepository.GetUserByPhoneNumber(phoneNumber);
+        if (user == null) return emptyList;
+
+        //Find cart belonging to the user
+        var cart = _cartRepository.GetCartByUserId(user.Id);
+        if (cart == null) return emptyList;
+
+        //Find cartItems on the cart with given time and quantiy
+        var cartItems = cart.CartItems.Where(ci => ci.Time == time).Where(ci => ci.Quantity == quantity).Where(ci => ci.Item.Id == itemId).ToList();
+        if (cartItems.Count == 0) return emptyList;
 
         return cartItems;
     }
