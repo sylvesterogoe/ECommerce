@@ -16,7 +16,7 @@ namespace ECommerce.Repositories
 
         public async Task AddCartAsync(Cart cart)
         {
-            await _context.Carts.AddAsync(cart);
+            _context.Carts.Add(cart);
             await _context.SaveChangesAsync();
         }
 
