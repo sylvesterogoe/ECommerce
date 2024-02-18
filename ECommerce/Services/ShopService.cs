@@ -47,7 +47,7 @@ public class ShopService : IShopService
             return updatedCartItem;
         }
 
-        var newCartItem = new CartItem { Id = cartItem.Id, Item = cartItem.Item, Quantity = cartItem.Quantity };
+        var newCartItem = new CartItem { Id = cartItem.Id, Item = cartItem.Item, Quantity = cartItem.Quantity, Time = cartItem.Time};
         await _cartItemRepository.AddCartItem(cart, newCartItem);
         return newCartItem;
     }
