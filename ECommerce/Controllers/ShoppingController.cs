@@ -8,12 +8,10 @@ namespace ECommerce.Controllers
     [Route("shop")]
     public class ShoppingController : ControllerBase
     {
-        private readonly ILogger<ShoppingController> _logger;
         private readonly IShopService _shopService;
 
-        public ShoppingController(ILogger<ShoppingController> logger, IShopService shopService)
+        public ShoppingController(IShopService shopService)
         {
-            _logger = logger;
             _shopService = shopService;
         }
 

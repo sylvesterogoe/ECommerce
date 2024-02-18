@@ -17,17 +17,5 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.Entity<CartItem>()
-        //    .HasKey(ci => new { ci.CartItemId });
-
-        //modelBuilder.Entity<CartItem>()
-        //    .HasOne(ci => ci.Cart)
-        //    .WithMany(c => c.CartItems)
-        //    .HasForeignKey(ci => ci.CartId);
-
-        //modelBuilder.Entity<CartItem>()
-        //    .HasOne(ci => ci.Item)
-        //    .WithMany()
-        //    .HasForeignKey(ci => ci.ItemId);
     }
 }
