@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceTests.ServicesTests
 {
-    public class ShopServiceTests
+    public class DBInteractionTests
     {
         [Fact]
         public async void AddUser_CreatesUserSuccessfully() 
