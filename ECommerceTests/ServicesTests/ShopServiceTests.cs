@@ -2,7 +2,6 @@
 using ECommerce.Models;
 using ECommerce.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 
 namespace ECommerceTests.ServicesTests
 {

@@ -61,14 +61,6 @@ public class ShopService : IShopService
         return cartItems;
     }
 
-    //public async List<CartItem> FilterCartItemsAsync<T>(T filter)
-    //{
-    //    CartItem result = filter switch
-    //    {
-    //        string => _cartItemRepository.GetCartItem(4)
-    //    };
-    //}
-
     public CartItem? GetCartItem(int cartItemId)
     {
         var cartItem = _cartItemRepository.GetCartItem(cartItemId);

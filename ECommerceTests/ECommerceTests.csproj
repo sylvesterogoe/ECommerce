@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cart\ECommerce.csproj" />
+    <ProjectReference Include="..\ECommerce\ECommerce.csproj" />
   </ItemGroup>
 
 </Project>
