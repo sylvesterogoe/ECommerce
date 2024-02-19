@@ -2,129 +2,86 @@ using ECommerce.Models;
 using ECommerce.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce.Controllers
+namespace ECommerce.Controllers;
+
+[ApiController]
+[Route("shop")]
+public class ShoppingController : ControllerBase
 {
-    [ApiController]
-    [Route("shop")]
-    public class ShoppingController : ControllerBase
+    private readonly IShopService _shopService;
+
+    public ShoppingController(IShopService shopService)
     {
-        private readonly IShopService _shopService;
+        _shopService = shopService;
+    }
 
-        public ShoppingController(IShopService shopService)
+    [HttpPost]
+    [Route("cart-item")]
+    public async Task<ActionResult> AddItemToCart([FromBody] CartItem cartItem, string phoneNumber, int cartId)
+    {
+        try
         {
-            _shopService = shopService;
+            if (string.IsNullOrWhiteSpace(phoneNumber) || phoneNumber.Length != 10)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "PhoneNumber must be 10 digits long");
+            }
+
+            var newCartItem = await _shopService.AddItemToCartAsync(cartItem, phoneNumber, cartId);
+            return Ok(newCartItem);
         }
-
-
-        [HttpPost]
-        [Route("user")]
-        public async Task<ActionResult> AddUser(User user)
+        catch (Exception ex)
         {
-            try
-            {
-                await _shopService.AddUser(user);
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add user: {ex.Message}");
-            }
+            return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add cart item: {ex.Message}");
         }
+    }
 
-        [HttpPost]
-        [Route("cart")]
-        public async Task<ActionResult> AddCart(Cart cart)
+    [HttpGet]
+    [Route("cart-item")]
+    public ActionResult GetCartItem(int cartItemId)
+    {
+        try
         {
-            try
-            {
-                await _shopService.AddCart(cart);
-                return Ok(cart);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add cart: {ex.Message}");
-            }
+            var cartItem = _shopService.GetCartItem(cartItemId);
+            if (cartItem == null) return NotFound();
+
+            return Ok(cartItem);
         }
-
-        [HttpPost]
-        [Route("cart-item")]
-        public async Task<ActionResult> AddItemToCart([FromBody]CartItem cartItem, int cartId)
+        catch (Exception ex)
         {
-            try
-            {
-                var newCartItem = await _shopService.AddItemToCartAsync(cartItem, cartId);
-                return Ok(newCartItem);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to add cart item: {ex.Message}");
-            }
+            return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to retrieve cart item: {ex.Message}");
         }
+    }
 
-        [HttpGet]
-        [Route("cart-item")]
-        public ActionResult GetCartItem(int cartItemId)
+    [HttpGet]
+    [Route("filter-cart-items")]
+    public ActionResult<List<CartItem>> GetCartItemsWithFilters(string phoneNumber, DateTime time, int quantity, int itemId)
+    {
+        try
         {
-            try
-            {
-                var cartItem = _shopService.GetCartItem(cartItemId);
-                if (cartItem == null) return NotFound();
-
-                return Ok(cartItem);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to retrieve cart item: {ex.Message}");
-            }
+            var cartItems = _shopService.GetCartItems(
+                phoneNumber, time, quantity, itemId);
+            return Ok(cartItems);
         }
-
-        [HttpGet]
-        [Route("cart-items")]
-        public ActionResult GetCartItems(int cartId)
+        catch (Exception ex)
         {
-            try
-            {
-                var cartItems = _shopService.GetAllCartItems(cartId);
-                return Ok(cartItems);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to retrieve cart items: {ex.Message}");
-            }
+            return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to retrieve cart items: {ex.Message}");
         }
+    }
 
-
-        [HttpGet]
-        [Route("filter-cart-items")]
-        public ActionResult<List<CartItem>> GetCartItemsWithFilters(string phoneNumber, DateTime time, int quantity, int itemId)
+    [HttpDelete]
+    [Route("cart-item")]
+    public ActionResult RemoveCartItem(int cartItemId)
+    {
+        try
         {
-            try
-            {
-                var cartItems = _shopService.GetCartItemsWithFiltering(
-                    phoneNumber, time, quantity, itemId);
-                return Ok(cartItems);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to retrieve cart items: {ex.Message}");
-            }
+            var cartItem = _shopService.RemoveCartItem(cartItemId);
+            if (cartItem == null) return NotFound();
+
+            return Ok(cartItem);
         }
-
-        [HttpDelete]
-        [Route("cart-item")]
-        public ActionResult RemoveCartItem(int cartItemId)
+        catch (Exception ex)
         {
-            try
-            {
-                var cartItem = _shopService.RemoveCartItem(cartItemId);
-                if (cartItem == null) return NotFound();
-
-                return Ok(cartItem);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to delete cart item: {ex.Message}");
-            }
+            return StatusCode(StatusCodes.Status500InternalServerError, $"Failed to delete cart item: {ex.Message}");
         }
     }
 }

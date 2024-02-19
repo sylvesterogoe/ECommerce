@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿
+namespace ECommerce.Models;
 
-namespace ECommerce.Models
+public class Cart
 {
-    public class Cart
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public List<CartItem> CartItems { get; set; }
-    }
+    public int Id { get; set; }
+    public List<CartItem> CartItems { get; set; }
+    public string PhoneNumber { get; set; }
 }
