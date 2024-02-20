@@ -22,16 +22,14 @@ public class ShopService : IShopService
     {
         if (cartItem == null || cartItem.Item == null) throw new ArgumentException("Invalid CartItem or Item");
 
-        var cart = _cartRepository.GetCartById(cartId);
-        if (cart == null)
+        var existingCart = _cartRepository.GetCartById(cartId);
+        if (existingCart == null)
         {
             await _cartRepository.AddCartAsync(new Cart { Id = cartId, CartItems = new List<CartItem> { cartItem }, PhoneNumber = phoneNumber });
             var createdCart = _cartRepository.GetCartById(cartId);
             var cartItems = createdCart!.CartItems.Where(ci => ci.Id == cartItem.Id).FirstOrDefault();
             return cartItems!;
         }
-
-        var existingCart = _cartRepository.GetCartById(cartId);
 
         var exstingCartItem = existingCart?.CartItems?.Where(ci => ci.Id == cartItem.Id).FirstOrDefault();
         if (exstingCartItem != null)
@@ -41,7 +39,7 @@ public class ShopService : IShopService
         }
 
         var newCartItem = new CartItem { Id = cartItem.Id, Item = cartItem.Item, Quantity = cartItem.Quantity, Time = cartItem.Time };
-        await _cartItemRepository.AddCartItem(cart, newCartItem);
+        await _cartItemRepository.AddCartItem(existingCart!, newCartItem);
         return newCartItem;
     }
 
