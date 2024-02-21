@@ -1,4 +1,4 @@
-﻿using ECommerce.Models;
+using ECommerce.Models;
 using ECommerce.Repositories.Interfaces;
 using ECommerce.Services.Interfaces;
 
@@ -27,12 +27,12 @@ public class ShopService : IShopService
         {
             await _cartRepository.AddCartAsync(new Cart { Id = cartId, CartItems = new List<CartItem> { cartItem }, PhoneNumber = phoneNumber });
             var createdCart = _cartRepository.GetCartById(cartId);
-            var cartItems = createdCart!.CartItems.Where(ci => ci.Id == cartItem.Id).FirstOrDefault();
-            return cartItems!;
+            var retrievedCartItem = createdCart!.CartItems.Where(ci => ci.Id == cartItem.Id).FirstOrDefault();
+            return retrievedCartItem!;
         }
 
-        var exstingCartItem = existingCart?.CartItems?.Where(ci => ci.Id == cartItem.Id).FirstOrDefault();
-        if (exstingCartItem != null)
+        var existingCartItem = existingCart?.CartItems?.Where(ci => ci.Id == cartItem.Id).FirstOrDefault();
+        if (existingCartItem != null)
         {
             var updatedCartItem = await _cartItemRepository.UpdateCartItemQuantity(exstingCartItem, cartItem.Quantity);
             return updatedCartItem;
