@@ -34,7 +34,7 @@ public class ShopService : IShopService
         var existingCartItem = existingCart?.CartItems?.Where(ci => ci.Id == cartItem.Id).FirstOrDefault();
         if (existingCartItem != null)
         {
-            var updatedCartItem = await _cartItemRepository.UpdateCartItemQuantity(exstingCartItem, cartItem.Quantity);
+            var updatedCartItem = await _cartItemRepository.UpdateCartItemQuantity(existingCartItem, cartItem.Quantity);
             return updatedCartItem;
         }
 
